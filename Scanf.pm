@@ -303,11 +303,11 @@ sub _do_num {
   for $i (@{$num}) {
     $scan   = shift(@scan);
     $format = shift(@{$a_format});
-    if ($scan =~ /^0/ && $format =~ /^[efg]/i) {
+    if ($scan =~ /^[-+]?0/ && $format =~ /^[efg]/i) {
 	if ($compat{'efg_oct'}) {
 	    $scan =~ s/\.$//; # let "0123." parse octally
 	} else {
-	    $scan =~ s/^0+//; # let "0123"  parse decimally
+	    $scan =~ s/^([-+]?)0+/$1/; # let "0123" parse decimally
 	}
     }
     $scan =~ tr/_//d if ($is_n = $i =~ /n/);

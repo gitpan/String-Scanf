@@ -1,6 +1,6 @@
 use String::Scanf;
 
-print "1..18\n";
+print "1..24\n";
 
 ($i, $s, $x) = sscanf('%d %3s %g', ' -5_678     abc 3.14e-99 9');
 
@@ -69,6 +69,30 @@ print "ok 17\n";
 
 print 'not ' unless ($c ==  83);
 print "ok 18\n";
+
+String::Scanf::set_compat('efg_oct' => 0);
+
+($a, $b, $c) = sscanf("%f %f %f", "+123. +0123. +0123");
+
+print 'not ' unless ($a == 123);
+print "ok 19\n";
+
+print 'not ' unless ($b == 123);
+print "ok 20\n";
+
+print 'not ' unless ($c == 123);
+print "ok 21\n";
+
+($a, $b, $c) = sscanf("%f %f %f", "-123. -0123. -0123");
+
+print 'not ' unless ($a == -123);
+print "ok 22\n";
+
+print 'not ' unless ($b == -123);
+print "ok 23\n";
+
+print 'not ' unless ($c == -123);
+print "ok 24\n";
 
 # eof
 
