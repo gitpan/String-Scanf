@@ -1,7 +1,5 @@
-Scanf.pm
+lib/String/Scanf.pm
 Makefile.PL
 MANIFEST
 README
-MANIFEST
-ChangeLog
 t/scanf.t

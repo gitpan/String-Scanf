@@ -1,45 +1,8 @@
-Hi,
+The 2.0 release of String::Scanf introduces an object-oriented interface
+(works only for Perl release 5.005 and up) that should speed up repetitive
+sscanf() operations.
 
-	this the Perl emulation module for the C stdio library scanf().
+Note that for the 2.0 release the old compatibility setting interface
+set_compat() has been removed since there is no need to be able to be
+backward compatible with the old release 1 bugs.
 
-	Perl 5 is required.
-
-	The documentation is in pod format (see perlpod), you can
-	view it by for example
-
-		pod2man scanf.pm | nroff -man | more
-
-	Note that the pod cocumentation should be quite readable "as is".
-
-	I hope you enjoy this little hack. If you find any bugs
-	please do not hesitate to tell me. If you feel like sending
-	me presents please do not hesitate to bribe me.
-
-	The Makefile.PL can be used like this:
-
-		perl Makefile.PL
-
-	If all is well (your Perl is installed ok), Makefile is
-	created. Then you can test whether the scanf emulation
-	works ok:
-
-		make test
-
-	You can install the module with
-
-		make install
-
-	This attempts to install to where the command 'perl' would
-	like to see its library files. If you want/need to install
-	somewhere else, rebuild the Makefile with
-
-		perl Makefile.PL INST_LIB=/some/where/else
-
-	After this you can attempt the
-
-		make install
-
-	and the scanf.pm should end up in /some/where/else.
-
--- 
-++jhi; // jhi@iki.fi, http://www.iki.fi/~jhi/
