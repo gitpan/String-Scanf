@@ -1,3 +1,13 @@
+Mon Mar 26 17:40:17 2001  Jarkko Hietaniemi  <jhi@alpha.hut.fi>
+
+	* Scanf.pm: Fix a bug reported by Mike Nolan <nolan@naic.edu>
+	  where [efg] would parse "0123" and "0123." as octals, not as
+	  decimals (as libc does).  For people who depended on the
+	  old (more Perl-like, kinda) behaviour, there's
+	  String::Scanf::set_compat('efg_oct' => 1);
+
+	* Released as 1.3.
+	
 Wed Jan  1 14:01:32 1997  Jarkko Hietaniemi  <jhi@iki.fi>
 
 	* README: Makefile.PL now much more useful (targets

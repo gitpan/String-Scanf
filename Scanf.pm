@@ -6,12 +6,16 @@ require Exporter;
 
 use Carp;
 
+use strict;
+
+use vars qw(@ISA @EXPORT);
+
 @ISA = qw(Exporter);
 @EXPORT = qw(sscanf);
 
-my $debug = 0;
+my $debug  = 0;
 
-use strict;
+my %compat;
 
 =head1 NAME
 
@@ -115,6 +119,15 @@ the full ::sscanf().
 
 More examples in the test set C<t/scanf.t>.
 
+=head1 COMPATIBILITY
+
+Versions prior to 1.3 scanned "0123" with [efg] formats as an octal number.
+C<C> sscanf would, however, understand this as a decimal number.  Versions
+starting from 1.3 will use the decimal interpretation.  If you have old code
+that depends on the old interpretation, you can say
+
+	String::Scanf::set_compat('efg_oct' => 1);
+
 =head1 INTERNALS
 
 The Perl C<sscanf()> turns the C<C>-C<stdio> style C<sscanf()> format
@@ -130,9 +143,9 @@ for educational purposes:
 	String::Scanf::debug(0);		# turn off debugging
 	print String::Scanf::debug(), "\n";	# the current debug status
 
-=head1 VERSION
+=head1 CREATED
 
-v1.1, $Id: Scanf.pm,v 1.8 1995/12/27 08:32:28 jhi Exp $
+v1.1, -Id: Scanf.pm,v 1.8 1995/12/27 08:32:28 jhi Exp -
 
 =head1 AUTHOR
 
@@ -152,14 +165,23 @@ sub debug {
   }
 }
 
+sub set_compat {
+    my %set_compat = @_;
+    if (exists $set_compat{'efg_oct'}) {
+	$compat{'efg_oct'} = $set_compat{'efg_oct'};
+    }
+}
+
 sub _do_percent {
   my ($i, $orderidx, $ignore, $width, $hl, $format,
-      $reord, $num, $c_format) = @_;
+      $reord, $num, $c_format, $a_format) = @_;
   my ($re, $is_num, $is_oct, $is_hex, $is_c);
 
   undef $re;
 
   push(@{$reord}, $orderidx) if (defined $orderidx);
+
+  push(@{$a_format}, $format);
 
   $is_num = 0;
   $is_oct = 0;
@@ -233,12 +255,13 @@ sub _do_format {
   my $num      = [];
   my $reord    = [];
   my $c_format = {};
+  my $a_format = [];
 
   $re =~
   s/
    %(?:(\d+)\$)?(\*)?(\d+)?([hl])?(\[(?:[\^\]])?.*\]|.)
    /
-   &_do_percent(\$i, $1, $2, $3, $4, $5, $reord, $num, $c_format)
+   &_do_percent(\$i, $1, $2, $3, $4, $5, $reord, $num, $c_format, $a_format)
    /gexo;
 
   $re =~ s/\\d([+*])/\\d$1(?:_\\d+)*/g;	# allow embedded underscores
@@ -246,7 +269,7 @@ sub _do_format {
 
   debug("sscanf: re = '$re'\n");
 
-  ($re, $num, $reord, $c_format);
+  ($re, $num, $reord, $c_format, $a_format);
 }
 
 sub _do_reorder {
@@ -273,12 +296,20 @@ sub _do_reorder {
 }
 
 sub _do_num {
-  my ($num, @scan) = @_;
+  my ($num, $a_format, @scan) = @_;
   my (@num) = ();
-  my ($i, $scan, $is_n);
+  my ($i, $scan, $format, $is_n);
 
   for $i (@{$num}) {
-    $scan = shift(@scan);
+    $scan   = shift(@scan);
+    $format = shift(@{$a_format});
+    if ($scan =~ /^0/ && $format =~ /^[efg]/i) {
+	if ($compat{'efg_oct'}) {
+	    $scan =~ s/\.$//; # let "0123." parse octally
+	} else {
+	    $scan =~ s/^0+//; # let "0123"  parse decimally
+	}
+    }
     $scan =~ tr/_//d if ($is_n = $i =~ /n/);
     $scan =~ s/^/0/  if ($i =~ /o/ and $scan !~ /^0/);
     $scan =~ s/^/0x/ if ($i =~ /h/ and $scan !~ /^0[xX]/);
@@ -310,11 +341,11 @@ sub format_to_re {
 }
 
 sub sscanf {
-  my ($re, $num, $reord, $c_format) = &_do_format(shift);
+  my ($re, $num, $reord, $c_format, $a_format) = &_do_format(shift);
   my ($input) = @_ ? shift : $_;
   my (@scan) = ($input =~ /$re/);
 
-  @scan = _do_num($num, @scan);
+  @scan = _do_num($num, $a_format, @scan);
   @scan = _do_c_format($c_format, @scan) if (%{$c_format});
   @scan = _do_reorder($reord, @scan)     if (@{$reord});
   

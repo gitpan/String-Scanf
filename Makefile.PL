@@ -3,5 +3,5 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
     'NAME'	=> 'String::Scanf',
-    'VERSION'	=> '1.2',
+    'VERSION'	=> '1.3',
 );
