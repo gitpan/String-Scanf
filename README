@@ -1,0 +1,28 @@
+Hi,
+
+	this the Perl emulation for the C stdio library scanf().
+	It requires Perl 5.
+
+	The documentation is in pod format (see perlpod), you can
+	view it by for example
+
+		pod2man scanf.pm | nroff -man | more
+
+	Note that the pod cocumentation should be quite readable "as is".
+
+	I hope you enjoy this little hack. If you find any bugs
+	please do not hesitate to tell me. If you feel like sending
+	me presents please do not hesitate to bribe me.
+
+	The Makefile.PL is useful only for 'make dist', that is,
+	for me, not you. One cannot for example say 'make test'
+	because of stupid some reason (my stupidity or the MakeMaker's).
+	You can do 'perl t/scanf.t' after you have installed the
+	String::Scanf. Or do this:
+
+		mkdir String
+		ln -s ../Scanf.pm String
+		perl -I. t/scanf.t
+
+---
+++jhi; // jhi@hut.fi, http://www.hut.fi/~jhi/
