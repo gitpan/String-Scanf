@@ -18,7 +18,7 @@ print "ok 3\n";
 print 'not ' unless ($x == 42);
 print "ok 4\n";
 
-print 'not ' unless ($y == 'ab');
+print 'not ' unless ($y eq 'ac');
 print "ok 5\n";
 
 print 'not ' unless ($$z[0] == 120 and $$z[1] == 100);

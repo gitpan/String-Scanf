@@ -1,0 +1,14 @@
+Wed Jan  1 14:01:32 1997  Jarkko Hietaniemi  <jhi@iki.fi>
+
+	* README: Makefile.PL now much more useful (targets
+	  test, install, (thanks to MakeMaker, not me),
+	  changed hut.fi to iki.fi.
+	 
+	* Makefile.PL: bumped to 1.2.
+	
+	* scanf.t: fixed the test #5 (was == 'ac' which is twice wrong)
+
+	* MANIFEST: added ChangeLog.
+	
+	* ChangeLog: Created.
+	

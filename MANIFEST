@@ -3,4 +3,5 @@ Makefile.PL
 MANIFEST
 README
 MANIFEST
+ChangeLog
 t/scanf.t
