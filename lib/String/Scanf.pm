@@ -4,7 +4,7 @@ use strict;
 
 use vars qw($VERSION @ISA @EXPORT);
 
-$VERSION = '2.0';
+$VERSION = '2.1';
 
 require Exporter;
 @ISA = qw(Exporter);
@@ -27,7 +27,7 @@ String::Scanf - emulate sscanf() of the C library
 
 or
 
-    # works only for Perl 5.005
+    # works only for Perl 5.005 or later
     use String::Scanf qw(); # import nothing
 
     my $s1 = String::Scanf->new("%d+%d %f-%s");
@@ -104,7 +104,7 @@ characters are also accecpted).
 
 The numeric formats may also have such a width but it is ignored.
 
-The numeric formats may have C<[hl> before the main option, e.g. C<%hd>,
+The numeric formats may have C<[hl]> before the main option, e.g. C<%hd>,
 but since such widths have no meaning in Perl, they are ignored.
 
 Non-format parts of the parameter string are matched literally
@@ -124,7 +124,7 @@ Math::* modules instead.
 
 Jarkko Hietaniemi <jhi@iki.fi>
 
-Copyright (c) 2002 Jarkko Hietaniemi.  All rights reserved.
+Copyright (c) 2002,2004 Jarkko Hietaniemi.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
@@ -184,7 +184,7 @@ sub _format_to_re {
 		if ($lit =~ /^\s+$/) {
 		    $re .= '\s+';
 		} else {
-		    $lit =~ s/(.)/\\$1/g;
+		    $lit =~ s/(\W)/\\$1/g;
 		    $re .= $lit;
 		}
 	    }

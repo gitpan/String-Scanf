@@ -1,6 +1,6 @@
 use String::Scanf;
 
-print "1..133\n";
+print "1..135\n";
 
 ($i, $s, $x) = sscanf('%d %3s %g', ' -5_678     abc 3.14e-99 9');
 
@@ -122,6 +122,8 @@ if ($] < 5.005) {
 
 my $t = 26;
 
+sub eps () { 1e-50 }
+
 while (<DATA>) {
   chomp;
   ($f, $d, $e) = split(/\s*;\s*/);
@@ -129,7 +131,7 @@ while (<DATA>) {
   my @e = split(/\s*,\s*/,$e);
   my $i;
   for ($i = 0; $i < @e; $i++) {
-    unless (($e[$i] =~ /^[\d-]/ && ($e[$i] == $r[$i])) || $e[$i] eq $r[$i]) {
+    unless (($e[$i] =~ /^[\d-]/ && ($e[$i] - $r[$i]) < eps) || $e[$i] eq $r[$i]) {
       last;
     }
   }
@@ -250,3 +252,5 @@ __DATA__
 %3s%3s	; foobar	; foo,bar
 %4s%2s	; foobar	; foob,ar
 %2s%4s	; foobar	; fo,obar
+State:%s; State: Active ; Active
+n=%g    ; n=1.234       ; 1.234
